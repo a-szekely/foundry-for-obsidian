@@ -1,24 +1,28 @@
 import { Client, createClient, Osdk } from "@osdk/client";
-import { createConfidentialOauthClient } from "@osdk/oauth";
-import { NoteObsidianPlugIn } from "@obsidian-dev/sdk";
+import { createPublicOauthClient } from "@osdk/oauth";
+import { NoteObsidianPlugIn } from "@foundry-for-obsidian/sdk";
 
-const client_id: string = "";
-const url: string = "";
-const ontologyRid: string = "";
-const client_secret: string = "";
+import nfetch, {Headers, Request, Response, RequestInfo, RequestInit} from "node-fetch";
 
-const auth = createConfidentialOauthClient(client_id, client_secret, url);
-const client: Client = createClient(url, ontologyRid, auth);
+export class FoundryClient {
+    clientId: string;
+    foundryUrl: string;
+    ontologyRid: string;
 
-export async function fetchObjects(): Promise<Osdk.Instance<NoteObsidianPlugIn>[]> {
-    const objects = (await client(NoteObsidianPlugIn).fetchPage({ $pageSize: 10 }));
-    return objects.data;
-}
+    client: Client;
 
-fetchObjects()
-    .then((objects: Osdk.Instance<NoteObsidianPlugIn>[]) => {
+    constructor(clientId: string, foundryUrl: string, ontologyRid: string) {
+        this.clientId = clientId;
+        this.foundryUrl = foundryUrl;
+        this.ontologyRid = ontologyRid;
+
+    }
+
+    async fetchObjects(): Promise<Osdk.Instance<NoteObsidianPlugIn>[]> {
+        console.log(JSON.stringify(this.client))
+        const objects = (await this.client(NoteObsidianPlugIn).fetchPage({ $pageSize: 10 }));
         console.log(objects);
-    })
-    .catch(error => {
-        console.error("Error fetching NoteObsidianPlugIn:", error);
-    });
+        return objects.data;
+    }
+
+}

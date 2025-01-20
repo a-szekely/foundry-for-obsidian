@@ -5,14 +5,12 @@ export interface FoundryForObsidianSettings {
 	clientId: string;
 	foundryUrl: string;
 	ontologyRid: string;
-	clientSecret: string;
 }
 
 export const DEFAULT_SETTINGS: FoundryForObsidianSettings = {
 	clientId: "",
 	foundryUrl: "",
-	ontologyRid: "",
-	clientSecret: ""
+	ontologyRid: ""
 }
 
 export class FoundrySettingsTab extends PluginSettingTab {
@@ -58,17 +56,6 @@ export class FoundrySettingsTab extends PluginSettingTab {
 				.setValue(this.plugin.settings.ontologyRid)
 				.onChange(async (value) => {
 					this.plugin.settings.ontologyRid = value;
-					await this.plugin.saveSettings();
-				}));
-
-		new Setting(containerEl)
-			.setName('Client Secret')
-			.setDesc('It\'s a secret')
-			.addText(text => text
-				.setPlaceholder('Enter your secret')
-				.setValue(this.plugin.settings.clientSecret)
-				.onChange(async (value) => {
-					this.plugin.settings.clientSecret = value;
 					await this.plugin.saveSettings();
 				}));
 	}
