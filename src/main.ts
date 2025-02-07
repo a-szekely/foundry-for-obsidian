@@ -54,12 +54,19 @@ export default class FoundryForObsidian extends Plugin {
 			id: 'open-webpage-test',
 			name: 'Open Webpage Test',
 			callback: () => {
-				// this.window = new remote.BrowserWindow({ parent: remote.getCurrentWindow(), modal: true });
-				this.window = new remote.BrowserWindow();
-				this.window.loadURL('https://www.google.com');
-				// this.window = window.open('https://www.google.com')!;
-
-
+				const url = "https://google.com";
+				const name = 'AttributionReportingWindow';
+				const windowFeatures: string = `attributionreporting=trigger,attributiondestination=${encodeURIComponent(url)}`
+				  
+				// Open the new window with the specified URL and features
+				const newWindow = window.open(url, name, windowFeatures);
+				
+				// Check if the window was successfully opened
+				if (newWindow) {
+					console.log('New window opened successfully with Attribution Reporting eligibility.');
+				} else {
+					console.error('Failed to open new window.');
+				}
 				
 			}
 		})

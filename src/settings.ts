@@ -1,4 +1,4 @@
-import { App, PluginSettingTab, Setting } from 'obsidian';
+import { App, PluginSettingTab, Setting, ButtonComponent } from 'obsidian';
 import type FoundryForObsidian from "./main";
 
 export interface FoundryForObsidianSettings {
@@ -58,5 +58,20 @@ export class FoundrySettingsTab extends PluginSettingTab {
 					this.plugin.settings.ontologyRid = value;
 					await this.plugin.saveSettings();
 				}));
+
+        // Add a new setting for the button
+        new Setting(containerEl)
+            .setName('Test Button')
+            .setDesc('Click the button to test the function')
+            .addButton((button: ButtonComponent) => {
+                button
+                    .setButtonText('Button')
+                    .onClick(() => {
+                        // Call the testFunction
+                        const win = window.open("https://google.com");
+                        console.log(JSON.stringify(win));
+                        // Emit an onClick event
+                    });
+            });
 	}
 }

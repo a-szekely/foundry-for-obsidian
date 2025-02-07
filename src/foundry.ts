@@ -6,7 +6,7 @@ import { NoteObsidianPlugIn } from "@foundry-for-obsidian/sdk";
 import nfetch, {Headers, Request, Response, RequestInfo, RequestInit} from "node-fetch";
 
 export class FoundryAuth {
-    window: any;
+    window: Window;
     clientId: string;
     foundryUrl: string;
     redirectUrl: string;
@@ -14,11 +14,9 @@ export class FoundryAuth {
     state: string | null = null;
 
     constructor(clientId: string, foundryUrl: string, redirectUrl: string) {
-        
         this.clientId = clientId;
         this.foundryUrl = foundryUrl;
         this.redirectUrl = redirectUrl;
-
     }
 
     async initiateSignIn(): Promise<void> {
@@ -41,11 +39,7 @@ export class FoundryAuth {
         authUrl.searchParams.set('code_challenge_method', 'S256');
 
         // Open a new window for authentication
-
-	    const { remote } = require('electron');
-        console.log(JSON.stringify(this.window))
-        this.window = new remote.BrowserWindow();
-		this.window.loadURL(authUrl.toString());
+        this.window = window.open(authUrl.toString(), 'FoundryAuth', 'popup=False')!;
         console.log(JSON.stringify(this.window))
     }
 
@@ -65,7 +59,7 @@ export class FoundryAuth {
         }
 
         // Prepare the token endpoint URL
-        const tokenEndpoint = new URL(`${this.foundryUrl}/multipass/api/oauth2/authorize`);
+        const tokenEndpoint = new URL(`${this.foundryUrl}/oauth/token`);
 
         // Prepare the token request
         const tokenRequest = new Request(tokenEndpoint.toString(), {
